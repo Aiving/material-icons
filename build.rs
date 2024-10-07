@@ -142,6 +142,8 @@ fn main() {
         .push_variant(Variant::new("Rounded"))
         .push_variant(Variant::new("Sharp"));
 
+    let mut name_variants = Vec::new();
+
     for (name, variants) in icons {
         let mut match_variants = Vec::new();
 
@@ -183,7 +185,23 @@ fn main() {
             ));
 
         root.push_fn(func);
+
+        name_variants.push(format!("{name:?} => icon_{name}(style, filled),"));
     }
+
+    root.new_fn("icon")
+        .vis("pub")
+        .arg("name", "impl AsRef<str>")
+        .arg("style", "IconStyle")
+        .arg("filled", "bool")
+        .ret("&'static [u8]")
+        .line(format!(
+            "match name.as_ref() {{
+    {}
+    value => panic!(\"there is no icon called {{value}}\")
+}}",
+            name_variants.join("\n")
+        ));
 
     std::fs::write(Path::new(&out_dir).join(CONSTANTS_FILE), root.to_string()).unwrap();
 }
