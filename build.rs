@@ -138,6 +138,7 @@ fn main() {
 
     root.new_enum("IconStyle")
         .vis("pub")
+	.derive("Debug, Hash, Copy, Clone, PartialEq, Eq, PartialOrd, Ord")
         .push_variant(Variant::new("Outlined"))
         .push_variant(Variant::new("Rounded"))
         .push_variant(Variant::new("Sharp"));
