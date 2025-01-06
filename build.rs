@@ -161,7 +161,7 @@ fn main() {
             );
 
             root.raw(format!(
-                "const {const_name}: &[u8] = include_bytes!(\"{}\");",
+                "const {const_name}: &[u8] = include_bytes!({:?});",
                 path.canonicalize().unwrap().display()
             ));
 
